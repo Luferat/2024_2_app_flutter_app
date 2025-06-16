@@ -1,90 +1,98 @@
 import 'package:flutter/material.dart';
 
 class MyDrawer extends StatelessWidget {
+
+  // A lista de itens do menu deve ser final em um StatelessWidget
+  // para garantir que ela não mude após a inicialização.
+  final List<Map<String, dynamic>> menuItems = const [
+    // Usar `const` para otimização se o conteúdo for constante
+    {
+      'icon': Icons.home, // Exemplo de outro ícone
+      'title': 'Página Inicial',
+      'subtitle': 'Voltar ao início',
+      'route': '/', // Exemplo de rota para a página inicial
+    },
+    {
+      'icon': Icons.bug_report,
+      'title': 'Cadastro',
+      'subtitle': 'Pararapãoduro 1',
+      'route': '/cadastro',
+    },
+    {
+      'icon': Icons.settings, // Exemplo de outro ícone
+      'title': 'Detalhes',
+      'subtitle': 'Zuandinho',
+      'route': '/detalhes', // Exemplo de rota para configurações
+    },
+    {
+      'icon': Icons.chair,
+      'title': 'Faça Contato',
+      'subtitle': 'Falaaivoce',
+      'route': '/contatos'
+    },
+    {
+      'icon': Icons.info, // Exemplo de outro ícone
+      'title': 'Sobre',
+      'subtitle': 'Informações do aplicativo',
+      'route': '/about', // Exemplo de rota para "Sobre"
+    },
+  ];
+
+  // Construtor deve ser const se todas as propriedades finais forem inicializadas com const.
   const MyDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
+        padding: EdgeInsets.zero,
+        // Remove o padding padrão do ListView que pode causar um espaço no topo
         children: [
           // Cabeçalho do Menu (opcional)
           const DrawerHeader(
             decoration: BoxDecoration(color: Colors.blue),
-            child: Text('Drawer Header'),
-          ),
-
-          // Exemplo de item de menu para uma rota
-          ListTile(
-            // Ícone (opcional)
-            leading: Icon(Icons.home, size: 40, color: Colors.blue[800]),
-
-            // Título e subtítulo (opcional) do item
-            title: const Text('Página inicial'),
-            subtitle: const Text('Pararapãoduro'),
-
-            // Ação ao clicar no item
-            onTap: () => {
-              // Fecha o menu
-              Navigator.pop(context),
-
-              // Acessa a rota especificada
-              Navigator.pushNamed(context, '/'),
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.bug_report, size: 40, color: Colors.blue[800]),
-            title: const Text('Página modelo'),
-            subtitle: const Text('Pirambolação'),
-            onTap: () => {
-              Navigator.pop(context),
-              Navigator.pushNamed(context, '/modelo'),
-            },
-          ),
-          // Acesso a Cadastro
-          ListTile(
-            leading: Icon(
-              Icons.text_decrease,
-              size: 40,
-              color: Colors.blue[800],
+            child: Text(
+              'Menu Principal', // Título do cabeçalho
+              style: TextStyle(color: Colors.white, fontSize: 24),
             ),
-            title: const Text('Cadastro'),
-            subtitle: const Text('Petequelizamento'),
-            onTap: () => {
-              Navigator.pop(context),
-              Navigator.pushNamed(context, '/cadastro'),
-            },
           ),
-          ListTile(
-            leading: Icon(Icons.edit, size: 40, color: Colors.blue[800]),
-            title: const Text('Detalhes'),
-            subtitle: const Text('Zuandinho'),
-            onTap: () => {
-              Navigator.pop(context),
-              Navigator.pushNamed(context, '/detalhes'),
-            },
-          ),
-          Divider(color: Colors.blue),
-          ListTile(
-            leading: Icon(Icons.chair, size: 40, color: Colors.blue[800]),
-            title: const Text('Faça Contato'),
-            subtitle: const Text('Falaaivoce'),
-            onTap: () => {
-              Navigator.pop(context),
-              Navigator.pushNamed(context, '/contatos'),
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.verified_user, size: 40, color: Colors.blue[800]),
-            title: const Text('Sobre'),
-            subtitle: const Text('Sobrenildação'),
-            onTap: () => {
-              Navigator.pop(context),
-              Navigator.pushNamed(context, '/sobre'),
-            },
-          ),
+
+          // Usando o operador spread (...) e .map para gerar os ListTile a partir da lista
+          ...menuItems.map((item) {
+            return _menuItem(
+              // Chamando o método privado para cada item
+              context,
+              item['icon'] as IconData, // Fazer cast explícito para IconData
+              item['title'] as String, // Fazer cast explícito para String
+              item['subtitle'] as String, // Fazer cast explícito para String
+              item['route'] as String, // Fazer cast explícito para String
+            );
+          }),
         ],
       ),
+    );
+  }
+
+  // Método privado para construir um ListTile de menu.
+  // Colocamos um underscore '_' no início para indicar que é um método privado da classe.
+  ListTile _menuItem(
+    BuildContext context,
+    IconData itemIcon,
+    String title,
+    String subtitle,
+    String toRoute,
+  ) {
+    return ListTile(
+      leading: Icon(itemIcon, size: 40, color: Colors.blue[800]),
+      title: Text(title),
+      subtitle: Text(subtitle),
+      onTap: () {
+        Navigator.pop(context); // Fecha o drawer
+        Navigator.pushNamed(
+          context,
+          toRoute,
+        ); // Navega para a rota especificada
+      },
     );
   }
 }
