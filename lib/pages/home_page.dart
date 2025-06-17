@@ -17,7 +17,7 @@ class HomePage extends StatelessWidget {
       appBar: MyAppBar(),
 
       // Conteúdo da página → <main>, <div>, <p>...
-      body: const Center(child: const Text('🟢 Página inicial')),
+      body: const Center(child: Text('🟢 Página inicial')),
 
       // Menu lateral → <nav>
       drawer: MyDrawer(),
